@@ -1,7 +1,9 @@
 .ground {
+    width: 80%;
     height: 500px;
     position: relative;
-    border-bottom: 3px solid #2c2c2c;
+    border: 3px solid #2c2c2c;
+    border-radius: 8px;
     overflow: hidden;
 }
 #ball{
