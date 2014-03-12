@@ -1,107 +1,65 @@
-function getCoords (el) {
-    var ballRect = el.getBoundingClientRect(),
-        coords = {},
-        r = ballRect.right,
-        l = ballRect.left,
-        t = ballRect.top,
-        b = ballRect.bottom;
-
-    coords.o = {
-        x: (r + l)/2,
-        y: (t + b)/2
-    };
-
-    coords.leftUp = {
-        x: l,
-        y: t
-    };
-    return el.coords = coords;
-}
 
 function addEvents (obj) {
-    obj.addEventListener('touchstart', function (e) {
+    var elem = obj.el
+    elem.addEventListener('touchstart', function (e) {
         touchStart(e);
     }, false);
 
-    obj.addEventListener('touchmove', function (e) {
+    elem.addEventListener('touchmove', function (e) {
         touchMove(e);
     }, false);
 
-    obj.addEventListener('touchend', function(e) {
+    elem.addEventListener('touchend', function(e) {
         touchEnd(e);
     }, false);
 
     function touchStart(e) {
-        obj.classList.add('touched');
-
+        elem.classList.add('touched');
         var touchobj = e.changedTouches[0],
             startx = parseInt(touchobj.clientX),
-            starty = parseInt(touchobj.clientY);
-        console.log(touchobj    );
-        console.log('Status: touchstart ClientX: ' + startx + 'px');
-        console.log('Status: touchstart ClientY: ' + starty + 'px');
-        var x0 = +(obj.style.left.split('px')[0]),
-            y0 = +(obj.style.top.split('px')[0]);
-        var dx = x0 - startx,
-            dy = x0 - starty;
-        obj.coords.dx = dx;
-        obj.coords.dy = dy;
-        obj.coords.x0 = x0;
-        obj.coords.y0 = y0;
+            starty = parseInt(touchobj.clientY),
+            x0 = +(elem.style.left.split('px')[0]),
+            y0 = +(elem.style.top.split('px')[0]),
+            dx =  startx - x0,
+            dy =  starty - y0;
+        obj.dx = +dx;
+        obj.dy = +dy;
     };
 
     function touchMove(e) {
-        var x = event.changedTouches[0].pageX,
-            y = event.changedTouches[0].pageY,
-            x0 = ball.coords.x0,
-            y0 = ball.coords.y0,
-            dx = ball.coords.dx,
-            dy = ball.coords.dy;
-        //console.log(x0, y0);
-        console.log(dx, dy, x0, y0);
+        var x = e.changedTouches[0].pageX,
+            y = e.changedTouches[0].pageY;
+            dx = obj.dx,
+            dy = obj.dy;
 
-
-        var translate =  'translate(' + (x + dx) + 'px, ' + (y + dx) + 'px)';
-        obj.style.left = x + dx + 'px'; //  'transform(' + (x + dx) + 'px, ' + (y + dy) + 'px);';
-        obj.style.top = y + dy + 'px';
+        //var translate =  'translate(' + (x + dx) + 'px, ' + (y + dx) + 'px)';
+        elem.style.left = x - dx + 'px'; //  'transform(' + (x + dx) + 'px, ' + (y + dy) + 'px);';
+        elem.style.top = y  - dy + 'px';
         //ball.style.transform = translate;
         //ball.style.webkitTransform = translate;
     };
 
     function touchEnd(e) {
-        obj.classList.remove('touched');
+        elem.classList.remove('touched');
     }
 }
 
 function AddNewItem(o) {
     var elem = this,
         types = ['ball', 'square'],
-        type = o.type || 'ball',
+        type = (types.indexOf(o.type) > 0) ? o.type : 'ball',
         itemClass = 't_item ' + type;
 
     var cont = document.getElementById('container'),
         el = document.createElement('div');
     el.className = itemClass;
-
     cont.appendChild(el);
-
     elem.el = el;
-    var br = elem.el.getBoundingClientRect();
+
+    /*var br = elem.el.getBoundingClientRect();
     elem.x0 = br.top;
-    elem.y0 = br.left;
+    elem.y0 = br.left;*/
 
     return elem;
 }
 
-
-/*
-getCoords(el);
-if (!el.coords){
-    console.log('this element doesn\'t have coordinates');
-    return false;
-}
-el.style.left = el.coords.leftUp.x + 'px';
-el.style.top = el.coords.leftUp.y + 'px';
-
-
-addEvents(el);*/

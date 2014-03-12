@@ -17,7 +17,7 @@
     border-radius: 50%;
     background-color: #621C66;
 }
-#ball.touched{
+#ball.touched, .t_item.touched{
     -webkit-box-shadow: 0px 0px 5px 5px #666666;
     box-shadow: 0px 0px 5px 5px #666666;
 }
