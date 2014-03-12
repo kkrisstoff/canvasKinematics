@@ -1,6 +1,7 @@
 
 function addEvents (obj) {
-    var elem = obj.el
+    var elem = obj.el,
+        obj = obj;
     elem.addEventListener('touchstart', function (e) {
         touchStart(e);
     }, false);
@@ -15,6 +16,7 @@ function addEvents (obj) {
 
     function touchStart(e) {
         elem.classList.add('touched');
+        //elem.style.webkitTransform = "translate(0, 0)"
         var touchobj = e.changedTouches[0],
             startx = parseInt(touchobj.clientX),
             starty = parseInt(touchobj.clientY),
@@ -28,20 +30,23 @@ function addEvents (obj) {
 
     function touchMove(e) {
         var x = e.changedTouches[0].pageX,
-            y = e.changedTouches[0].pageY;
+            y = e.changedTouches[0].pageY,
             dx = obj.dx,
             dy = obj.dy;
-
-        //var translate =  'translate(' + (x + dx) + 'px, ' + (y + dx) + 'px)';
-        elem.style.left = x - dx + 'px'; //  'transform(' + (x + dx) + 'px, ' + (y + dy) + 'px);';
-        elem.style.top = y  - dy + 'px';
-        //ball.style.transform = translate;
-        //ball.style.webkitTransform = translate;
+        //elem.style.left = x - dx + 'px';
+        //elem.style.top = y  - dy + 'px';
+        var x0 = x - dx,
+            y0 = y - dy,
+            translate = "translate3D(" +  x0 + "px, " + y0  + "px, 0)";
+        elem.style.webkitTransform = translate;
     };
 
     function touchEnd(e) {
         elem.classList.remove('touched');
-    }
+        //elem.style.webkitTransform = "translateY(450px)";
+        var data = window.getComputedStyle(elem, null).getPropertyValue('-webkit-transform');
+        console.log(data);
+    };
 }
 
 function AddNewItem(o) {
