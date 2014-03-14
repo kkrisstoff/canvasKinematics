@@ -24,7 +24,8 @@
 
 .t_item{
     position: absolute;
-    -webkit-transform: translate(0, 0);
+    -webkit-transform3D: translate(0, 0);
+    /*-webkit-transition: -webkit-transform 0;*/
     background-color: #621C66;
 }
 .ball{
