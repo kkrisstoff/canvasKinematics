@@ -13,8 +13,8 @@
             b = contRect.bottom;
 
         console.log(contRect);
-        this.floor = b;
-
+        container.floor = b;
+        this.addTouchEvents(contEl);
         return this;
     };
 
@@ -49,7 +49,7 @@
             obj.loc.tx = obj.loc.tx || 0;
             obj.loc.ty = obj.loc.ty || 0;
 
-            console.log(obj.grav);
+            console.log(!!obj.grav);
         };
 
         function touchMove(e) {
@@ -100,6 +100,33 @@
 
         addEvents(elem);
         return elem;
+    }
+
+    this.addTouchEvents = function (el) {
+        var screen = el;
+        var timer;
+            this.isGravity;
+        screen.addEventListener('touchstart', function (e) {
+            var item,
+                target = e.target;
+            this.isGravity = true;
+            if (target.classList.contains("t_item")) {
+                return false;
+            }
+            timer = setTimeout(function () {
+                item = new AddNewItem({type: 'ball'});
+                if (this.isGravity) {
+                    item.gravity(this.isGravity);
+                }
+                clearTimeout(timer);
+            }, 500)
+        }, false);
+        screen.addEventListener('touchmove', function () {
+            this.isGravity = false;
+        }, false);
+        screen.addEventListener('touchend', function() {
+            clearTimeout(timer);
+        }, false);
     }
 
     return core;
