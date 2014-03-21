@@ -50,6 +50,7 @@
             obj.loc.ty = obj.loc.ty || 0;
 
             console.log(!!obj.grav);
+            console.log(container.floor);
         };
 
         function touchMove(e) {
@@ -58,7 +59,7 @@
                 x0 = obj.loc.x0,
                 y0 = obj.loc.y0,
                 tx =  obj.loc.tx,
-                ty = obj.grav ? 0 : obj.loc.ty;
+                ty = obj.grav ? container.floor - 50 : obj.loc.ty;
             //elem.style.left = x - dx + 'px';
             //elem.style.top = y  - dy + 'px';
 
@@ -75,7 +76,7 @@
             obj.loc.ty = obj.loc.zy;
             if (obj.grav){
                 elem.style.webkitTransition = "-webkit-transform 1s";
-                elem.style.webkitTransform = "translate(" + obj.loc.tx + "px, 0)";
+                elem.style.webkitTransform = "translate(" + obj.loc.tx + "px, " + (container.floor - 56) + "px)";
             }
             elem.classList.remove('touched');
         };
@@ -87,17 +88,21 @@
         var elem = this,
             types = ['ball', 'square'],
             type = (types.indexOf(o.type) > 0) ? o.type : 'ball',
-            itemClass = 't_item ' + type;
+            itemClass = 't_item ' + type,
+            x = o.x0,
+            y = o.y0,
+            translate = "translate3D(" +  (x - 50) + "px, " + (y - 50)  + "px, 0)";
+
 
         var cont = document.getElementById('container'),
             el = document.createElement('div');
         el.className = itemClass;
         cont.appendChild(el);
+        el.style.webkitTransform = translate;
         elem.el = el;
         elem.gravity = function (flag) {
             this.grav = !!flag;
         }
-
         addEvents(elem);
         return elem;
     }
@@ -105,24 +110,30 @@
     this.addTouchEvents = function (el) {
         var screen = el;
         var timer;
-            this.isGravity;
+        var isGravity = true;
         screen.addEventListener('touchstart', function (e) {
             var item,
-                target = e.target;
-            this.isGravity = true;
+                target = e.target,
+                x0 = e.touches[0].pageX,
+                y0 = e.touches[0].pageY,
+                opt = {
+                    type: 'ball',
+                    x0: x0,
+                    y0: y0
+                };
             if (target.classList.contains("t_item")) {
                 return false;
             }
+            isGravity = true;
             timer = setTimeout(function () {
-                item = new AddNewItem({type: 'ball'});
-                if (this.isGravity) {
-                    item.gravity(this.isGravity);
-                }
+                item = new AddNewItem(opt);
+                item.gravity(isGravity);
                 clearTimeout(timer);
             }, 500)
         }, false);
         screen.addEventListener('touchmove', function () {
-            this.isGravity = false;
+            console.log('touchmove');
+            isGravity = false;
         }, false);
         screen.addEventListener('touchend', function() {
             clearTimeout(timer);
