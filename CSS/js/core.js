@@ -82,7 +82,7 @@
         };
 
         return obj;
-    }
+    };
 
     core.AddNewItem = function (o) {
         var elem = this,
@@ -102,10 +102,10 @@
         elem.el = el;
         elem.gravity = function (flag) {
             this.grav = !!flag;
-        }
+        };
         addEvents(elem);
         return elem;
-    }
+    };
 
     this.addTouchEvents = function (el) {
         var screen = el;
@@ -138,8 +138,8 @@
         screen.addEventListener('touchend', function() {
             clearTimeout(timer);
         }, false);
-    }
+    };
 
     return core;
-})()
+})();
 
