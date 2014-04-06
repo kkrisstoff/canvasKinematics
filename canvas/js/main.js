@@ -1,53 +1,64 @@
-var canvas;
-var ctx;
+(function () {
 
-canvasSettings();
-function canvasSettings () {
-    var canvas = document.getElementById('canvas'),
-        ctx = canvas.getContext('2d');
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // constructor for field
+    this.CanvasField = function () {
+        if ( !(this instanceof CanvasField) ) {
+            return new CanvasField();
+        }
+        var self = this;
 
-    this.canvas = canvas;
-    this.ctx = ctx;
-}
+        self.initializeCanvas = function () {
+            var canvas = document.getElementById('canvas'),
+                ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
 
-function createCircle (x, r, c){
-    function degToRad (x){
-        return Math.PI*x/180;
-    }
-    console.log(canvas, this.canvas );
-    return {
-        x: x,
-        y: canvas.height - r,
-        r: r,
-        arc: degToRad(360),
-        color: c
+            self.canvas = canvas;
+            self.ctx = ctx;
+        };
+
+        self.initializeCanvas();
     };
-}
 
-function drawCircle (obj){
-    var ctx = this.ctx,
-        x = obj.x,
-        y = obj.y,
-        r = obj.r,
-        arc = obj.arc,
-        color = obj.color;
+    // constructor for object
+    this.Circle = function (c) {
+        if ( !(this instanceof Circle) ) {
+            return new Circle(c);
+        }
+        var self = this;
 
-    var grad;
-    grad = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
-    grad.addColorStop(0, color);
-    grad.addColorStop(1, '000');
+        var canvas = c.canvas;
+        var ctx = c.ctx;
 
-    ctx.strokeStyle = grad;
-    ctx.fillStyle = grad;
+        function degToRad (x){
+            return Math.PI*x/180;
+        }
 
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, arc, true);
-    ctx.fill();
-    ctx.stroke();
-}
 
-var c1 = createCircle(150, 15, '836FFF');
-drawCircle(c1);
 
+        self.drawCircle = function (obj){
+            var x = obj.x,
+                y = obj.y,
+                r = obj.r,
+                color = obj.color,
+                arc = degToRad(360);
+
+            var grad;
+            grad = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
+            grad.addColorStop(0, color);
+            grad.addColorStop(1, '000');
+
+            ctx.strokeStyle = grad;
+            ctx.fillStyle = grad;
+
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, arc, true);
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        return self;
+    };
+
+    return this;
+})();
