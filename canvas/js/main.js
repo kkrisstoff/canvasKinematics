@@ -1,64 +1,82 @@
-(function () {
-
-    // constructor for field
-    this.CanvasField = function () {
-        if ( !(this instanceof CanvasField) ) {
-            return new CanvasField();
-        }
-        var self = this;
-
-        self.initializeCanvas = function () {
-            var canvas = document.getElementById('canvas'),
-                ctx = canvas.getContext('2d');
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-
-            self.canvas = canvas;
-            self.ctx = ctx;
-        };
-
-        self.initializeCanvas();
-    };
-
-    // constructor for object
-    this.Circle = function (c) {
-        if ( !(this instanceof Circle) ) {
-            return new Circle(c);
-        }
-        var self = this;
-
-        var canvas = c.canvas;
-        var ctx = c.ctx;
-
-        function degToRad (x){
-            return Math.PI*x/180;
-        }
-
-
-
-        self.drawCircle = function (obj){
-            var x = obj.x,
-                y = obj.y,
-                r = obj.r,
-                color = obj.color,
-                arc = degToRad(360);
-
-            var grad;
-            grad = ctx.createRadialGradient(250, 250, 5, 250, 250, 300);
-            grad.addColorStop(0, color);
-            grad.addColorStop(1, '000');
-
-            ctx.strokeStyle = grad;
-            ctx.fillStyle = grad;
-
-            ctx.beginPath();
-            ctx.arc(x, y, r, 0, arc, true);
-            ctx.fill();
-            ctx.stroke();
-        }
-
-        return self;
-    };
+/** Constructor for Game Field */
+function Field(id) {
+    var canvasId = id || 'canvas';
+    this.initialize.call(this, canvasId);
 
     return this;
-})();
+};
+Field.prototype.initialize = function (id) {
+    var canvas = document.getElementById(id);
+    var ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    var rect = canvas.getBoundingClientRect();
+    this.ctx = ctx;
+    this.x0 = rect.left;
+    this.y0 = rect.top;
+    this.width = rect.width;
+    this.height = rect.height;
+};
+
+/** Constructor for Game Ball Item */
+function Ball (obj) {
+    this.x = obj.x || 0;
+    this.y = obj.y || 0;
+    this.r = obj.r || 0;
+    this.vX = obj.vY || 0;
+    this.vY = obj.vX || 0;
+    this.color = obj.color || '666';
+
+    return this;
+}
+Ball.prototype.draw = function (ctx){
+    var arc = degToRad(360);
+
+    ctx.strokeStyle = this.color;
+    ctx.fillStyle = this.color;
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, arc, true);
+    ctx.fill();
+    ctx.stroke();
+
+    function degToRad (x){
+        return Math.PI*x/180;
+    }
+};
+Ball.prototype.clean = function (ctx) {
+    var x0 = this.x - this.r - 1,
+        y0 = this.y - this.r - 1,
+        d = 2*this.r + 2;
+
+    ctx.clearRect(x0, y0, d, d)
+};
+Ball.prototype.move = function (){
+    this.x += this.vX;
+    this.y += this.vY;
+};
+Ball.prototype.setVelocity = function (vx, vy) {
+    this.vX = vx;
+    this.vY = vy;
+};
+Ball.prototype.getVelocity = function () {
+    var vx = this.vX;
+    var vy = this.vY;
+    return {
+        vX: vx,
+        vY: vy
+    }
+};
+
+
+
+
+
+/*function Factory(){
+    this.ctx = '';
+}
+Factory.prototype.createBall = function(x, y){
+    return new Ball(x, y, this.ctx);
+}*/
+
