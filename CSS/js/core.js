@@ -103,7 +103,7 @@
         elem.gravity = function (flag) {
             this.grav = !!flag;
         };
-        addEvents(elem);
+        //addEvents(elem);
         return elem;
     };
 
