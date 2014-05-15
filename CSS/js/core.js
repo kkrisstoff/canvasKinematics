@@ -51,7 +51,7 @@
 
             console.log(!!obj.grav);
             console.log(container.floor);
-        };
+        }
 
         function touchMove(e) {
             var x = e.changedTouches[0].pageX,
@@ -69,7 +69,7 @@
             elem.style.webkitTransform = translate;
             obj.loc.zx = dx;
             obj.loc.zy = dy;
-        };
+        }
 
         function touchEnd(e) {
             obj.loc.tx = obj.loc.zx;
@@ -79,7 +79,7 @@
                 elem.style.webkitTransform = "translate(" + obj.loc.tx + "px, " + (container.floor - 56) + "px)";
             }
             elem.classList.remove('touched');
-        };
+        }
 
         return obj;
     };

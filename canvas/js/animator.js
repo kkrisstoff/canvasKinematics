@@ -16,38 +16,48 @@ Animator.prototype.initialize = function (f) {
 };
 
 Animator.prototype.move = function () {
-    var self = this,
-        ctx = this.ctx,
-        objs = this.objects;
 
-    console.log(this.objects);
+};
+Animator.prototype.step = function () {
+    var self = this,
+        objs = this.objects;
+    f.clean();
 
     for (var i=0, l=objs.length; i < l; i +=1) {
-        moveStart(objs[i]);
+        objs[i].move();
+        var j = 1;
+        for (j; j < (l-i); j+=1){
+            checkCollision(objs[i], objs[i+j]);
+        }
+        checkIsInBox(objs[i]);
+        objs[i].draw(f.ctx);
     }
+    function checkCollision (o1, o2) {
+        //console.log("---");
+        //console.log(o1, o2);
+        var x1 = o1.x,
+            x2 = o2.x,
+            y1 = o1.y,
+            y2 = o2.y,
+            distance = Math.sqrt((x1-x2)*(x1-x2) + (y1 - y2)*(y1 - y2)),
+            sumOfRadiuses = (o1.r + o2.r);
+        if (distance <= sumOfRadiuses){
+            collide(o1, o2);
+        }
+        function collide(o1, o2) {
+            console.log("BANG");
+            o1.setVelocity(-o1.vX, -o1.vY);
+            o2.setVelocity(-o2.vX, -o2.vY);
+        }
 
-    function moveStart (o) {
-        var v = o.getVelocity();
-
-        action();
-
-        function action () {
-            o.clean(f.ctx);
-            o.move();
-            o.draw(f.ctx);
-            if (!isInBoxV(o)) {
-                v = o.getVelocity();
-                o.setVelocity(-o.vX, o.vY);
-            } else if (!isInBoxH(o)) {
-                v = o.getVelocity();
-                o.setVelocity(o.vX, -o.vY);
-            }
-            raf = window.requestAnimationFrame(function () {
-                action()
-            });
+    }
+    function checkIsInBox (o) {
+        if (!isInBoxV(o)) {
+            o.setVelocity(-o.vX, o.vY);
+        } else if (!isInBoxH(o)) {
+            o.setVelocity(o.vX, -o.vY);
         }
     }
-
     function isInBoxV (o) {
         var left = 0 + o.r,
             right = self.rect.w - o.r;
@@ -58,14 +68,19 @@ Animator.prototype.move = function () {
             bottom = self.rect.h - o.r;
         return o.y > top && o.y < bottom
     }
-
-
 };
-
-
-
+Animator.prototype.start = function () {
+    var self = this;
+    this.raf = window.requestAnimationFrame(function () {
+        self.step();
+        self.start();
+        //self.stop();
+    });
+};
 Animator.prototype.stop = function () {
-
+    if (this.raf) {
+        window.cancelAnimationFrame(this.raf);
+    }
 };
 Animator.prototype.addObj = function (o) {
     this.objects.push(o)

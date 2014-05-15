@@ -18,6 +18,9 @@ Field.prototype.initialize = function (id) {
     this.width = rect.width;
     this.height = rect.height;
 };
+Field.prototype.clean = function () {
+    this.ctx.clearRect(0, 0, this.width, this.height)
+};
 
 /** Constructor for Game Ball Item */
 function Ball (obj) {

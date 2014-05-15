@@ -1,8 +1,13 @@
 initCont('container');
 
-var ball = new  AddNewItem({type: 'ball'});
-
+var ball = new  AddNewItem({type: 'ball', x0: 150, y0: 130});
 eTouch(ball.el);
+
+var ball1 = new  AddNewItem({type: 'ball', x0: 100, y0: 300});
+eTouch(ball1.el);
+
+var ball2 = new  AddNewItem({type: 'ball', x0: 200, y0: 200});
+eTouch(ball2.el);
 
 /*var sqr = new AddNewItem({type: 'square'});
 sqr.gravity(true);*/
@@ -22,19 +27,21 @@ gameField.onclick = function () {
     gameField.notify(console.log(this));
 };
 
+
 /* register ball as a Observer */
-extend(new Observer(), ball)
+regBallObserver(ball);
+regBallObserver(ball1);
+regBallObserver(ball2);
 
-// Override with custom update behaviour
-ball.update = function(){
-    this.el.className += " touched";
-    console.log("!!!");
-    console.log(this.el.classList);
-};
-gameField.addObserver(ball);
-
-
-
+function regBallObserver(ball) {
+    extend(new Observer(), ball)
+    // Override with custom update behaviour
+    ball.update = function(){
+        this.el.className += " touched";
+        console.log("!!!");
+    };
+    gameField.addObserver(ball);
+}
 
 /** Example */
 /* Extend an object with an extension */
