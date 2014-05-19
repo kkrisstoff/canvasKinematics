@@ -17,6 +17,8 @@ Field.prototype.initialize = function (id) {
     this.y0 = rect.top;
     this.width = rect.width;
     this.height = rect.height;
+
+    this.el = document.getElementById(id);
 };
 Field.prototype.clean = function () {
     this.ctx.clearRect(0, 0, this.width, this.height)

@@ -1,5 +1,10 @@
 var f = new Field('canvas');
-var raf = null;
+f.touchstart = function () {
+    console.log("Field was tapped, context: ", this);
+};
+f.touchend = function () {
+    console.log("Field tap was ended, context: ", this);
+};
 console.log(f);
 
 var c = new Ball({
@@ -49,9 +54,48 @@ c4.setVelocity(-2, -1);
 //move(c2);
 
 var animation = new Animator(f);
-animation.addObj(c);
+/*animation.addObj(c);
 animation.addObj(c1);
 animation.addObj(c2);
 animation.addObj(c3);
-animation.addObj(c4);
+animation.addObj(c4);*/
 animation.start();
+
+
+/** Observer */
+/* create the Subject */
+var gameField = f.el;
+var options = {};
+console.log(gameField);
+eTouch(f, options);
+
+/* register game field as a Subject */
+extend(new Subject(), gameField);
+gameField.onclick = function () {
+    gameField.notify();
+};
+
+
+/* register ball as a Observer */
+regBallObserver(c);
+regBallObserver(c1);
+regBallObserver(c2);
+
+function regBallObserver(c) {
+    extend(new Observer(), c)
+    // Override with custom update behaviour
+    c.update = function(){
+        //this.el.className += " touched";
+        //animation.addObj(c);
+        console.log("!!!" + c);
+    };
+    gameField.addObserver(c);
+}
+
+
+
+function extend( extension, obj ){
+    for ( var key in extension ){
+        obj[key] = extension[key];
+    }
+}
