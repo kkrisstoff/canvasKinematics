@@ -13,6 +13,10 @@ Animator.prototype.initialize = function (f) {
 
     this.rect.w = f.width;
     this.rect.h = f.height;
+
+    this.clean = function () {
+        f.clean();
+    }
 };
 
 Animator.prototype.move = function () {
@@ -21,7 +25,7 @@ Animator.prototype.move = function () {
 Animator.prototype.step = function () {
     var self = this,
         objs = this.objects;
-    f.clean();
+    this.clean();
 
     for (var i=0, l=objs.length; i < l; i +=1) {
         objs[i].move();
@@ -30,7 +34,7 @@ Animator.prototype.step = function () {
             checkCollision(objs[i], objs[i+j]);
         }
         checkIsInBox(objs[i]);
-        objs[i].draw(f.ctx);
+        objs[i].draw(self.ctx);
     }
     function checkCollision (o1, o2) {
         //console.log("---");

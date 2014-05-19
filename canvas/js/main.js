@@ -4,7 +4,7 @@ function Field(id) {
     this.initialize.call(this, canvasId);
 
     return this;
-};
+}
 Field.prototype.initialize = function (id) {
     var canvas = document.getElementById(id);
     var ctx = canvas.getContext('2d');
