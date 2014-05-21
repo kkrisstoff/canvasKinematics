@@ -84,7 +84,6 @@ function regBallObserver(c) {
     extend(new Observer(), c)
     // Override with custom update behaviour
     c.update = function(p){
-        //this.el.className += " touched";
         //animation.addObj(c);
         checkIsBallTapped(p, c);
     };
@@ -108,7 +107,14 @@ function checkIsBallTapped(point, obj) {
         console.log("GET IT!!!");
         var vx = Math.floor((Math.random() * 5)),
             vy = Math.floor((Math.random() * 5));
-        o.setVelocity(vx, vy)
+        if (o.isMoveing) {
+            o.setVelocity(0, 0);
+            o.isMoveing = false;
+        } else {
+            o.setVelocity(vx, vy);
+            o.isMoveing = true;
+        }
+
     }
 }
 
