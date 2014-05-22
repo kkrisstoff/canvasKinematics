@@ -1,16 +1,13 @@
-initCont('container');
+var field = new GameField('container');
 
-var ball = new  AddNewItem({type: 'ball', x0: 150, y0: 130});
-eTouch(ball);
+var ball = new  GameItem({type: 'ball', x0: 150, y0: 130});
 
-var ball1 = new  AddNewItem({type: 'ball', x0: 100, y0: 300});
-eTouch(ball1);
+var ball1 = new  GameItem({type: 'ball', x0: 100, y0: 300});
 
-var ball2 = new  AddNewItem({type: 'ball', x0: 200, y0: 200});
-eTouch(ball2);
+var ball2 = new  GameItem({type: 'ball', x0: 200, y0: 200});
 
-/*var sqr = new AddNewItem({type: 'square'});
-sqr.gravity(true);*/
+/*var sqr = new GameField({type: 'square'});
+sqr.setGravity(true);*/
 
 
 
