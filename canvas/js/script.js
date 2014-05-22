@@ -1,10 +1,4 @@
 var gameField = new Field('canvas');
-/*gameField.touchstart = function (e) {
-    console.log("Field was tapped, context: ", e);
-};
-gameField.touchend = function () {
-    console.log("Field tap was ended, context: ", this);
-};*/
 
 var c = new Ball({
     r: 15,

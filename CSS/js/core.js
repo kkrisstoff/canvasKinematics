@@ -8,55 +8,58 @@ function GameField(id) {
 }
 
 GameField.prototype.init = function () {
-    var self = this;
     var contRect = this.el.getBoundingClientRect(),
         r = contRect.right,
         l = contRect.left,
         t = contRect.top,
         b = contRect.bottom;
 
-    console.log(contRect);
     this.container.floor = b;
-    addTouchEvents();
+    this.top = t;
+    this.left = l;
 
-    function addTouchEvents() {
-        var screen = self.el;
-        var timer;
-        var isGravity = true;
-
-        self.touchStart = function (e) {
-            console.log("Field was tapped, context: ", e);
-            var item,
-                target = e.target,
-                x0 = e.touches[0].pageX,
-                y0 = e.touches[0].pageY,
-                opt = {
-                    type: 'ball',
-                    x0: x0,
-                    y0: y0
-                };
-            if (target.classList.contains("t_item")) {
-                return false;
-            }
-            isGravity = true;
-            timer = setTimeout(function () {
-                item = new GameItem(opt);
-                item.setGravity(isGravity);
-                clearTimeout(timer);
-            }, 500)
-
-        };
-        self.touchMove = function () {
-            isGravity = false;
-        };
-        self.touchEnd = function () {
-            clearTimeout(timer);
-            console.log("Field tap was ended, context: ", this);
-        };
-
-        eTouch(self);
-    }
+    this.addTouchEvents();
 };
+GameField.prototype.addTouchEvents = function() {
+    var self = this,
+        timer,
+        t = this.top,
+        l = this.left;
+    var isGravity = true;
+
+    this.touchStart = function (e) {
+        console.log("Field was tapped, context: ", e);
+        var item,
+            target = e.target,
+            x0 = e.touches[0].pageX  - l - 25 - 3,  //hardcode: 25 radius, 3 - border
+            y0 = e.touches[0].pageY  - t - 25 - 3,
+            opt = {
+                type: 'ball',
+                x0: x0,
+                y0: y0
+            };
+        if (target.classList.contains("t_item")) {
+            return false;
+        }
+        isGravity = true;
+        timer = setTimeout(function () {
+            item = new GameItem(opt);
+            item.setGravity(isGravity);
+            console.log("gravity :", isGravity);
+        }, 500)
+
+    };
+    this.touchMove = function () {
+        isGravity = false;
+    };
+    this.touchEnd = function () {
+        clearTimeout(timer);
+        console.log("Field tap was ended, context: ", this);
+    };
+
+    eTouch(this);
+};
+
 
 function GameItem(o) {
     // o.type
@@ -77,7 +80,7 @@ GameItem.prototype.init = function () {
         itemClass = 't_item ' + type;
     var cont = document.getElementById('container'),
         elem = document.createElement('div');
-    var translate = "translate3D(" +  (this.x - 50) + "px, " + (this.y - 50)  + "px, 0)";
+    var translate = "translate3D(" +  (this.x) + "px, " + (this.y)  + "px, 0)";
 
     elem.style.webkitTransform = translate;
     elem.className = itemClass;
@@ -86,7 +89,6 @@ GameItem.prototype.init = function () {
     this.el = elem;
 
     this.addEvents();
-
 };
 GameItem.prototype.setGravity = function (flag) {
     this.gravity = !!flag;
@@ -96,7 +98,6 @@ GameItem.prototype.addEvents = function () {
         obj = this;
 
     obj.loc = obj.loc? obj.loc: {tx: obj.x, ty: obj.y};
-    console.log(obj.loc);
     // (x0, y0) touch coords
     // (tx, ty) transform coords
     // (dx. dy) transform delta
@@ -142,14 +143,24 @@ GameItem.prototype.addEvents = function () {
         e.stopPropagation();
         obj.loc.tx = obj.loc.zx;
         obj.loc.ty = obj.loc.zy;
-        if (obj.grav){
-            elem.style.webkitTransition = "-webkit-transform 1s";
-            elem.style.webkitTransform = "translate(" + obj.loc.tx + "px, " + (container.floor - 56) + "px)";
+        if (this.gravity){
+              this.gravitate();
         }
         elem.classList.remove('touched');
         console.log("Item was tapped !!touchend");
     };
 
     eTouch(this);
+};
+GameItem.prototype.gravitate = function () {
+    var self = this,
+        elem = this.el;
+
+    var floor = 500,
+        rad = 25; //hardcode: CSS height, radius
+
+    elem.style.webkitTransition = "-webkit-transform 1s";
+    elem.style.webkitTransform = "translate(" + self.loc.tx + "px, " + (floor - 2*rad) + "px)";
+    this.loc.ty = floor - 2*rad;
 };
 
