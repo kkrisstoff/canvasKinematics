@@ -117,3 +117,7 @@ function extend( extension, obj ){
         obj[key] = extension[key];
     }
 }
+
+/* sound */
+var sound = new Sound();
+sound.load(['../storage/punch.mp3']);

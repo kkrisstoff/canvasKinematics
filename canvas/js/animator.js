@@ -50,7 +50,9 @@ Animator.prototype.step = function () {
         }
         function collide(o1, o2) {
             console.log("BANG");
-            playBangSound(bangBuffer);
+            //TODO: hardcode. Make it as callback;
+            sound.play();
+
             o1.setVelocity(-o1.vX, -o1.vY);
             o2.setVelocity(-o2.vX, -o2.vY);
         }
