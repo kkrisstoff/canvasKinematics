@@ -1,3 +1,6 @@
+/**
+ * @class Animator
+ */
 function Animator (field) {
     this.objects = [];
     this.rect = {

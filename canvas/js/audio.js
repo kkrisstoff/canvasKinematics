@@ -4,7 +4,6 @@
 /**
  * @class Sound
  */
-
 function Sound() {
     this.context = null;
     this.bufferList = [];
@@ -25,12 +24,23 @@ Sound.prototype.initialize = function () {
     }
     this.context = ctx;
 };
-Sound.prototype.load = function(urlList, callback) {
-    if (callback && typeof callback == 'function'){
+Sound.prototype.load = function(urlList/*, callback*/) {
+    /*if (callback && typeof callback == 'function'){
         this.onLoad = callback
+    }*/
+    /* type of arguments:
+     * ['str', 'str', 'str']
+     * {'key': 'str', 'key': 'str', 'key': 'str'}
+     * */
+    if ((arguments.length == 2 && typeof arguments[1] != 'function') || arguments.length > 2) {
+        console.error("you try to download wrong URL");
+        return false;
     }
-    for (var i = 0; i < urlList.length; ++i){
-        this.loadBuffer(urlList[i], i);
+    for(var i in urlList){
+        if (urlList.hasOwnProperty(i)) {
+            console.log(urlList[i], i);
+            this.loadBuffer(urlList[i], i);
+        }
     }
 };
 Sound.prototype.play = function () {
