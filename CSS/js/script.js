@@ -1,10 +1,10 @@
 var field = new GameField('container');
 
-var ball = new  GameItem({type: 'ball', x0: 150, y0: 130});
+var ball = new  GameItem({field: field, type: 'ball', x0: 150, y0: 130});
 
-var ball1 = new  GameItem({type: 'ball', x0: 100, y0: 300});
+var ball1 = new  GameItem({field: field, type: 'ball', x0: 100, y0: 300});
 
-var ball2 = new  GameItem({type: 'ball', x0: 200, y0: 200});
+var ball2 = new  GameItem({field: field, type: 'ball', x0: 200, y0: 200});
 
 /*var sqr = new GameField({type: 'square'});
 sqr.setGravity(true);*/

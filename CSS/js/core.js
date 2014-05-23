@@ -6,7 +6,6 @@ function GameField(id) {
     this.container = {};
     this.init();
 }
-
 GameField.prototype.init = function () {
     var contRect = this.el.getBoundingClientRect(),
         r = contRect.right,
@@ -14,9 +13,9 @@ GameField.prototype.init = function () {
         t = contRect.top,
         b = contRect.bottom;
 
-    this.container.floor = b;
     this.top = t;
     this.left = l;
+    this.floor = b;
 
     this.addTouchEvents();
 };
@@ -34,6 +33,7 @@ GameField.prototype.addTouchEvents = function() {
             x0 = e.touches[0].pageX  - l - 25 - 3,  //hardcode: 25 radius, 3 - border
             y0 = e.touches[0].pageY  - t - 25 - 3,
             opt = {
+                field: self,
                 type: 'ball',
                 x0: x0,
                 y0: y0
@@ -47,7 +47,6 @@ GameField.prototype.addTouchEvents = function() {
             item.setGravity(isGravity);
             console.log("gravity :", isGravity);
         }, 500)
-
     };
     this.touchMove = function () {
         isGravity = false;
@@ -69,6 +68,7 @@ function GameItem(o) {
     this.type = o.type || "ball";
     this.x = o.x0 || 30;
     this.y = o.y0 || 30;
+    this.field = o.field || {};
 
     this.gravity = null;
 
@@ -156,9 +156,9 @@ GameItem.prototype.gravitate = function () {
     var self = this,
         elem = this.el;
 
-    var floor = 500,
-        rad = 25; //hardcode: CSS height, radius
-
+    var floor = this.field.floor - 14, //hardcode: CSS margin top + border;
+        rad = 25; //hardcode: CSS radius;
+    //console.log(floor);
     elem.style.webkitTransition = "-webkit-transform 1s";
     elem.style.webkitTransform = "translate(" + self.loc.tx + "px, " + (floor - 2*rad) + "px)";
     this.loc.ty = floor - 2*rad;

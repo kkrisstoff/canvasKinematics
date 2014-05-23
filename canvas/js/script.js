@@ -58,7 +58,7 @@ eTouch(gameField, options);
 
 /* register game field as a Subject */
 extend(new Subject(), gameField);
-gameField.touchstart = function (e) {
+gameField.touchStart = function (e) {
     var point = {};
     point.x = e.changedTouches[0].pageX - gameField.x0;
     point.y = e.changedTouches[0].pageY - gameField.y0;
